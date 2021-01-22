@@ -4,6 +4,7 @@
 #include <vector>
 #include "SDL.h"
 #include "snake.h"
+#include "SDL_ttf.h"
 
 class Renderer {
  public:
@@ -11,8 +12,18 @@ class Renderer {
            const std::size_t grid_width, const std::size_t grid_height);
   ~Renderer();
 
-  void Render(Snake const snake, SDL_Point const &food);
+  void RenderMenu(bool twoPlayers);
+  void Render(Snake const snake, std::vector<SDL_Point> const &foods);
   void UpdateWindowTitle(int score, int fps);
+  struct RGBA
+  {
+    Uint8 R;
+    Uint8 G;
+    Uint8 B;
+    Uint8 A;
+  };
+
+
 
  private:
   SDL_Window *sdl_window;
@@ -22,6 +33,9 @@ class Renderer {
   const std::size_t screen_height;
   const std::size_t grid_width;
   const std::size_t grid_height;
+
+  RGBA selected_color = {0xFF, 0x00, 0x00, 0xFF};
+  RGBA not_selected_color = {0xFF, 0xCC, 0x00, 0xFF};
 };
 
 #endif

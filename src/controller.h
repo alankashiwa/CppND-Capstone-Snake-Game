@@ -6,6 +6,7 @@
 class Controller {
  public:
   void HandleInput(bool &running, Snake &snake) const;
+  void HandleMenuInput(bool &startup, bool &running, bool &twoPlayers) const;
 
  private:
   void ChangeDirection(Snake &snake, Snake::Direction input,

@@ -4,12 +4,22 @@
 
 Game::Game(std::size_t grid_width, std::size_t grid_height)
     : snake(grid_width, grid_height),
+      snake2(grid_width, grid_height),
       engine(dev()),
-      random_w(0, static_cast<int>(grid_width)),
-      random_h(0, static_cast<int>(grid_height)) {
-  PlaceFood();
+      random_w(0, static_cast<int>(grid_width)-1),
+      random_h(0, static_cast<int>(grid_height)-1) {
+  
 }
 
+void Game::Init()
+{
+  for (int i = 0; i < numOfFood; ++i) {
+     foods.emplace_back();
+  }
+  for (int i = 0; i <= foods.size(); ++i) {
+      PlaceFood(i);
+  }
+}
 void Game::Run(Controller const &controller, Renderer &renderer,
                std::size_t target_frame_duration) {
   Uint32 title_timestamp = SDL_GetTicks();
@@ -19,13 +29,30 @@ void Game::Run(Controller const &controller, Renderer &renderer,
   int frame_count = 0;
   bool running = true;
 
+  bool startup = true;
+  bool twoPlayers = false;
+  while (startup) {
+    controller.HandleMenuInput(startup, running, twoPlayers);
+    renderer.RenderMenu(twoPlayers);
+    SDL_Delay(target_frame_duration);
+  }
+
+  if (twoPlayers) {
+    numOfFood = 2;
+  } else {
+    numOfFood = 1;
+  }
+
+  Init();
+  
+  
   while (running) {
     frame_start = SDL_GetTicks();
 
     // Input, Update, Render - the main game loop.
     controller.HandleInput(running, snake);
     Update();
-    renderer.Render(snake, food);
+    renderer.Render(snake, foods);
 
     frame_end = SDL_GetTicks();
 
@@ -50,19 +77,23 @@ void Game::Run(Controller const &controller, Renderer &renderer,
   }
 }
 
-void Game::PlaceFood() {
+void Game::PlaceFood(int foodIndex) {
+
   int x, y;
   while (true) {
     x = random_w(engine);
     y = random_h(engine);
     // Check that the location is not occupied by a snake item before placing
     // food.
-    if (!snake.SnakeCell(x, y)) {
-      food.x = x;
-      food.y = y;
-      return;
+    // Also check the food location is different from others
+    std::cout << x << "," << y << std::endl;
+    if (!snake.SnakeCell(x, y) && InFoodPosition(x,y)== -1) {
+      foods[foodIndex].x = x;
+      foods[foodIndex].y = y;
+      break;
     }
   }
+
 }
 
 void Game::Update() {
@@ -74,13 +105,30 @@ void Game::Update() {
   int new_y = static_cast<int>(snake.head_y);
 
   // Check if there's food over here
-  if (food.x == new_x && food.y == new_y) {
+  auto foodIndexFound = InFoodPosition(new_x, new_y);
+  if (foodIndexFound != -1)
+  {
     score++;
-    PlaceFood();
+    PlaceFood(foodIndexFound);
     // Grow snake and increase speed.
     snake.GrowBody();
     snake.speed += 0.02;
   }
+
+  
+}
+
+int Game::InFoodPosition(int x, int y) {
+  for (int i = 0; i < foods.size(); ++i) {
+    auto currentFood = foods[i];
+    if (currentFood.x == -1 || currentFood.y == -1) {
+      continue;
+    }
+    if (currentFood.x == x && currentFood.y == y) {
+      return i;
+    }
+  }
+  return -1;
 }
 
 int Game::GetScore() const { return score; }

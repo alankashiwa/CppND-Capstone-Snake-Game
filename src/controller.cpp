@@ -9,6 +9,26 @@ void Controller::ChangeDirection(Snake &snake, Snake::Direction input,
   return;
 }
 
+void Controller::HandleMenuInput(bool &startup,bool &running, bool &twoPlayers) const {
+  SDL_Event e;
+    while (SDL_PollEvent(&e)) {
+    if (e.type == SDL_QUIT) {
+      startup = false;
+      running = false;
+    } else if (e.type == SDL_KEYDOWN) {
+      switch (e.key.keysym.sym) {
+        case SDLK_UP:
+        case SDLK_DOWN:
+          twoPlayers = !twoPlayers;
+          break;
+        case SDLK_RETURN:
+          // Decide Mode and out
+          startup = false;
+          break;
+      }
+    }
+  }
+}
 void Controller::HandleInput(bool &running, Snake &snake) const {
   SDL_Event e;
   while (SDL_PollEvent(&e)) {
