@@ -35,6 +35,7 @@ class Game {
   void PlaceFood(int foodIndex);
   void Update();
   int InFoodPosition(int x, int y);
+  void SnakeBumpCheck(Snake &snake1, Snake &snake2);
 };
 
 #endif

@@ -7,6 +7,7 @@
 class Snake {
  public:
   enum class Direction { kUp, kDown, kLeft, kRight };
+  enum class StartPosition { center, left, right};
 
   Snake(int grid_width, int grid_height)
       : grid_width(grid_width),
@@ -15,6 +16,7 @@ class Snake {
         head_y(grid_height / 2) {}
 
   void Update();
+  void SetStartPosition(StartPosition start_pos);
 
   void GrowBody();
   bool SnakeCell(int x, int y);

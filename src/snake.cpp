@@ -2,6 +2,20 @@
 #include <cmath>
 #include <iostream>
 
+void Snake::SetStartPosition(StartPosition start_pos) {
+  switch(start_pos) {
+    case StartPosition::center:
+      head_x = grid_width / 2;
+      break;
+    case StartPosition::left:
+      head_x = grid_width / 3;
+      break;
+    case StartPosition::right:
+      head_x = grid_width / 3 * 2;
+      break;
+  }
+}
+
 void Snake::Update() {
   SDL_Point prev_cell{
       static_cast<int>(head_x),
@@ -56,11 +70,11 @@ void Snake::UpdateBody(SDL_Point &current_head_cell, SDL_Point &prev_head_cell) 
   }
 
   // Check if the snake has died.
-  for (auto const &item : body) {
-    if (current_head_cell.x == item.x && current_head_cell.y == item.y) {
-      alive = false;
-    }
-  }
+  // for (auto const &item : body) {
+  //   if (current_head_cell.x == item.x && current_head_cell.y == item.y) {
+  //     alive = false;
+  //   }
+  // }
 }
 
 void Snake::GrowBody() { growing = true; }

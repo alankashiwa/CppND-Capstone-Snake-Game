@@ -5,7 +5,7 @@
 
 class Controller {
  public:
-  void HandleInput(bool &running, Snake &snake) const;
+  void HandleInput(bool &running, Snake &snake, Snake &snake2, bool twoPlayers) const;
   void HandleMenuInput(bool &startup, bool &running, bool &twoPlayers) const;
 
  private:

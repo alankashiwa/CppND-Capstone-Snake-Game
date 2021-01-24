@@ -13,7 +13,7 @@ class Renderer {
   ~Renderer();
 
   void RenderMenu(bool twoPlayers);
-  void Render(Snake const snake, std::vector<SDL_Point> const &foods);
+  void Render(Snake const snake, Snake const snake2, bool twoPlayers, std::vector<SDL_Point> const &foods);
   void UpdateWindowTitle(int score, int fps);
   struct RGBA
   {
