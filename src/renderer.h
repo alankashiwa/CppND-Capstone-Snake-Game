@@ -34,8 +34,8 @@ class Renderer {
   const std::size_t grid_width;
   const std::size_t grid_height;
 
-  RGBA selected_color = {0xFF, 0x00, 0x00, 0xFF};
-  RGBA not_selected_color = {0xFF, 0xCC, 0x00, 0xFF};
+  RGBA selected_color = {0xFF, 0xCC, 0x00, 0xFF};
+  RGBA not_selected_color = {0xAA, 0xAA, 0xAA, 0xFF};
 };
 
 #endif
